@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Gift Idea Finder</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#dcdad5","tertiary":"#5f5c55","primary-container":"#cb4926","on-tertiary-container":"#fffbff","tertiary-container":"#78746d","surface-container-highest":"#e5e2dd","background":"#fcf9f4","surface-bright":"#fcf9f4","inverse-on-surface":"#f3f0eb","on-tertiary-fixed":"#1d1b16","primary-fixed-dim":"#ffb4a1","on-error-container":"#93000a","on-tertiary-fixed-variant":"#494640","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","tertiary-fixed":"#e8e2d9","surface-container":"#f0ede9","outline":"#8d716a","inverse-surface":"#31302d","on-secondary-container":"#3d6d5d","surface":"#fcf9f4","on-secondary-fixed":"#002117","secondary-fixed":"#baeed9","surface-variant":"#e5e2dd","surface-container-high":"#ebe8e3","on-error":"#ffffff","on-primary":"#ffffff","on-primary-fixed":"#3c0800","inverse-primary":"#ffb4a1","secondary-fixed-dim":"#9ed1bd","on-surface-variant":"#59413b","surface-container-low":"#f6f3ee","tertiary-fixed-dim":"#cbc6bd","on-background":"#1c1c19","error-container":"#ffdad6","surface-tint":"#ac3311","surface-container-lowest":"#ffffff","secondary-container":"#baeed9","on-tertiary":"#ffffff","secondary":"#376757","error":"#ba1a1a","on-secondary":"#ffffff","outline-variant":"#e1bfb7","on-surface":"#1c1c19","on-secondary-fixed-variant":"#1d4f40","on-primary-fixed-variant":"#881f00","primary":"#a9310f"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xl":"2.5rem","space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem",gutter:"1rem","gutter-laptop":"1.5rem","margin-laptop":"2.5rem","space-sm":"0.5rem",margin:"1rem","margin-tablet":"1.5rem"},fontFamily:{"headline-md":["Epilogue"],"display-mobile":["Epilogue"],display:["Epilogue"],"label-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"headline-lg-mobile":["Epilogue"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Epilogue"],"body-lg":["Plus Jakarta Sans"],"headline-lg":["Epilogue"]},fontSize:{"headline-md":["22px",{lineHeight:"28px",letterSpacing:"-0.015em",fontWeight:"600"}],"display-mobile":["32px",{lineHeight:"38px",letterSpacing:"-0.02em",fontWeight:"700"}],display:["44px",{lineHeight:"52px",letterSpacing:"-0.03em",fontWeight:"700"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"20px",fontWeight:"400"}],"body-md":["15px",{lineHeight:"24px",fontWeight:"400"}],"label-sm":["10px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"700"}],"headline-lg-mobile":["26px",{lineHeight:"32px",letterSpacing:"-0.02em",fontWeight:"600"}],"label-lg":["14px",{lineHeight:"20px",letterSpacing:"0.01em",fontWeight:"600"}],"headline-sm":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["18px",{lineHeight:"28px",fontWeight:"400"}],"headline-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-7xl mx-auto px-margin-laptop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="workspace" href="#"><div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-[0_2px_6px_-1px_rgba(30,41,59,0.04)]"><span class="material-symbols-outlined text-[20px]">card_giftcard</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight group-hover:text-primary transition-colors">Gift Idea Finder</span></a></div><div class="flex items-center gap-space-sm"><button class="hidden sm:flex items-center gap-1.5 px-space-sm py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all shadow-[0_1px_3px_-1px_rgba(30,41,59,0.03)]" title="Start new recipient query while keeping currency and country preferences" type="button"><span class="material-symbols-outlined text-[16px]">restart_alt</span><span class="font-label-md text-label-md">New Person / Reset</span><span class="w-1.5 h-1.5 rounded-full bg-secondary-container ml-0.5" title="Preferences locked"></span></button><a class="flex items-center gap-space-xs px-space-md py-2 rounded-full bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-[0_2px_6px_-1px_rgba(30,41,59,0.04)] active:scale-95" data-path="shortlist" href="#"><span class="material-symbols-outlined text-[18px]">bookmark</span><span class="font-label-lg text-label-lg">Shortlist (2/3)</span></a></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-80px)]"><div class="flex flex-col w-full">
+<!-- Sub-Navigation & Stepper Bar -->
+<div class="sticky top-20 z-40 w-full bg-surface-container-low/95 backdrop-blur-md shadow-sm">
+<div class="max-w-7xl mx-auto px-margin-laptop py-space-sm flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-sm">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect height="5" width="20" x="2" y="7"></rect><line x1="12" x2="12" y1="22" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Gift Idea Finder</span>
+</div>
+<nav aria-label="Workflow steps" class="flex flex-wrap items-center gap-space-xs">
+<button class="nav-pill px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-primary text-on-primary shadow-sm" data-nav="access" type="button">
+          1. Access
+        </button>
+<button class="nav-pill px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high" data-nav="workspace" type="button">
+          2. Find Ideas
+        </button>
+<button class="nav-pill px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high" data-nav="grid" type="button">
+          3. 5-Slot Grid
+        </button>
+<button class="nav-pill px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high" data-nav="shortlist" id="nav-shortlist-btn" type="button">
+          4. Shortlist (<span id="nav-shortlist-count">2</span>/3)
+        </button>
+</nav>
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all shadow-sm font-label-md text-label-md cursor-pointer" id="btn-reset-person" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+<span>New Person / Reset</span>
+</button>
+</div>
+</div>
+<!-- SCREEN 1: FRIEND ACCESS GATE -->
+<section class="screen-view w-full max-w-7xl mx-auto px-margin-laptop py-space-xl flex flex-col items-center justify-center" id="screen-access">
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-xl shadow-md p-space-xl flex flex-col gap-space-lg">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary">Private Invitation</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Friend Access Gate</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Enter your invited email and shared code to begin private gift curation.</p>
+</div>
+<form class="flex flex-col gap-space-md" id="access-form" onsubmit="return false;">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="access-email">Allowed Email</label>
+<input class="w-full px-space-md py-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none focus:bg-surface-container-lowest transition-colors" id="access-email" placeholder="you@example.com" required="" type="email" value="alex.curates@example.com"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="access-code">Shared Invite Code</label>
+<input class="w-full px-space-md py-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none focus:bg-surface-container-lowest transition-colors" id="access-code" placeholder="e.g. WARM-GIFT-2025" required="" type="text" value="WARM-GIFT-2025"/>
+</div>
+<div class="flex items-start gap-space-sm p-space-md rounded-lg bg-secondary-container/40 text-on-secondary-fixed">
+<svg class="w-5 h-5 shrink-0 mt-0.5 text-secondary" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><rect height="5" rx="1" width="6" x="9" y="11"></rect><path d="M10 11V9a2 2 0 1 1 4 0v2"></path></svg>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed">
+<strong class="font-label-md text-label-md">Privacy Reminder:</strong> No full names, home addresses, phone numbers, or sensitive personal data. Everything stays local to your session.
+          </p>
+</div>
+<button class="w-full py-3.5 px-space-lg rounded-full bg-primary text-on-primary hover:bg-primary-container transition-all shadow-md font-label-lg text-label-lg flex items-center justify-center gap-space-xs cursor-pointer active:scale-95" id="btn-access-continue" type="button">
+<span>Continue</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</button>
+</form>
+</div>
+</section>
+<!-- SCREEN 2: GIFT FINDER WORKSPACE -->
+<section class="screen-view hidden w-full max-w-7xl mx-auto px-margin-laptop py-space-xl flex flex-col gap-space-xl" id="screen-workspace">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary">Step 02 / Recipient Brief</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Gift Finder Workspace</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Shape a thoughtful brief with quick presets or custom preferences.</p>
+</div>
+<!-- Quick-Start Presets -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-tertiary">Quick-Start Presets</span>
+<div class="flex flex-wrap gap-space-xs">
+<button class="preset-btn px-space-md py-1.5 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all shadow-sm font-label-md text-label-md cursor-pointer" data-preset="coffee" type="button">
+            ☕ Coffee &amp; desk fan
+          </button>
+<button class="preset-btn px-space-md py-1.5 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all shadow-sm font-label-md text-label-md cursor-pointer" data-preset="apartment" type="button">
+            🪴 New apartment host
+          </button>
+<button class="preset-btn px-space-md py-1.5 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all shadow-sm font-label-md text-label-md cursor-pointer" data-preset="traveler" type="button">
+            🧳 Weekend traveler
+          </button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Column: Core Fields -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="ws-nickname">Recipient Nickname / Label</label>
+<input class="w-full px-space-md py-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none focus:bg-surface-container transition-colors" id="ws-nickname" placeholder="e.g. Maya, Uncle Joe, Desk Neighbor" type="text" value="Maya (Studio Pal)"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface">Occasion</label>
+<div class="flex flex-wrap gap-space-xs" id="occasion-chips">
+<button class="occasion-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-secondary text-on-secondary shadow-sm" data-occasion="Birthday" type="button">Birthday</button>
+<button class="occasion-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high" data-occasion="Housewarming" type="button">Housewarming</button>
+<button class="occasion-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high" data-occasion="Festive" type="button">Festive</button>
+<button class="occasion-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high" data-occasion="Thank You" type="button">Thank You</button>
+</div>
+</div>
+</div>
+<!-- Budget Range & Currency -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface">Budget Range &amp; Currency</label>
+<div class="grid grid-cols-3 gap-space-sm">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-tertiary">Currency</span>
+<select class="w-full px-space-md py-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none cursor-pointer" id="ws-currency">
+<option value="USD $">USD $</option>
+<option value="INR ₹">INR ₹</option>
+<option value="EUR €">EUR €</option>
+<option value="GBP £">GBP £</option>
+</select>
+</div>
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-tertiary">Min</span>
+<input class="w-full px-space-md py-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none" id="ws-budget-min" type="number" value="35"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-tertiary">Max</span>
+<input class="w-full px-space-md py-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none" id="ws-budget-max" type="number" value="90"/>
+</div>
+</div>
+</div>
+<!-- Likes -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="ws-likes">Likes &amp; Interests</label>
+<textarea class="w-full px-space-md py-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none resize-none" id="ws-likes" placeholder="What lights them up? e.g. pour-over coffee, tactile stationery, warm ambient lighting..." rows="3">Pour-over coffee rituals, tactile stationery, warm brass desk accents, quiet weekend reading</textarea>
+</div>
+<!-- Expandable Optional Details -->
+<div class="flex flex-col gap-space-sm bg-surface-container-low rounded-lg p-space-md">
+<button class="flex items-center justify-between w-full text-left font-label-lg text-label-lg text-on-surface cursor-pointer" id="toggle-optional-btn" type="button">
+<span>Optional Details (Age, Gender, Location, Job/Role)</span>
+<svg class="w-5 h-5 text-tertiary transition-transform" fill="none" id="optional-chevron" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<div class="hidden grid grid-cols-1 sm:grid-cols-2 gap-space-sm pt-space-sm" id="optional-details-panel">
+<input class="px-space-md py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none" id="ws-age" placeholder="Age range (e.g. Late 20s)" type="text"/>
+<input class="px-space-md py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none" id="ws-gender" placeholder="Gender / Pronouns (optional)" type="text"/>
+<input class="px-space-md py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none" id="ws-location" placeholder="Location / Climate (e.g. Rainy city)" type="text"/>
+<input class="px-space-md py-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none" id="ws-role" placeholder="Job / Role (e.g. Product Designer)" type="text"/>
+</div>
+</div>
+</div>
+<!-- Right Column: Guardrails & CTA -->
+<div class="lg:col-span-5 flex flex-col gap-space-lg">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface">Already Owns</span>
+<p class="font-body-sm text-body-sm text-tertiary">Tap to exclude items they already have on their shelf.</p>
+<div class="flex flex-wrap gap-space-xs" id="owns-chips">
+<button class="guard-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-secondary text-on-secondary shadow-sm" type="button">French Press</button>
+<button class="guard-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high" type="button">Kindle</button>
+<button class="guard-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high" type="button">Mechanical Keyboard</button>
+</div>
+<input class="mt-space-xs w-full px-space-md py-2 rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm shadow-inner focus:outline-none" id="ws-owns-custom" placeholder="+ Add custom item they already own..." type="text"/>
+</div>
+<div class="flex flex-col gap-space-xs pt-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface">Do Not Want</span>
+<p class="font-body-sm text-body-sm text-tertiary">Filter out categories that miss the mark.</p>
+<div class="flex flex-wrap gap-space-xs" id="avoid-chips">
+<button class="guard-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-primary text-on-primary shadow-sm" type="button">Scented Candles</button>
+<button class="guard-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high" type="button">Generic Mugs</button>
+<button class="guard-chip px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all cursor-pointer bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high" type="button">Gift Cards</button>
+</div>
+<input class="mt-space-xs w-full px-space-md py-2 rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm shadow-inner focus:outline-none" id="ws-avoid-custom" placeholder="+ Add custom item to avoid..." type="text"/>
+</div>
+</div>
+<button class="w-full py-4 px-space-lg rounded-full bg-primary text-on-primary hover:bg-primary-container transition-all shadow-md font-label-lg text-label-lg flex items-center justify-center gap-space-sm cursor-pointer active:scale-95" id="btn-find-ideas" type="button">
+<span>Find 5 Gift Ideas ✨</span>
+</button>
+</div>
+</div>
+</section>
+<!-- SCREEN 3: 5-SLOT GIFT IDEAS GRID -->
+<section class="screen-view hidden w-full max-w-7xl mx-auto px-margin-laptop py-space-xl flex flex-col gap-space-lg" id="screen-grid">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary">Step 03 / Curated 5-Slot Grid</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">5 Tailored Gift Ideas for <span class="text-primary" id="grid-recipient-name">Maya</span></h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Accept 2–3 favorites for your final shortlist, or reject &amp; replace any slot.</p>
+</div>
+<div class="flex items-center gap-space-sm bg-surface-container-lowest px-space-md py-2 rounded-full shadow-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-label-md text-label-md text-on-surface"><span id="grid-accepted-count">2</span> Accepted</span>
+<span class="text-tertiary">•</span>
+<span class="font-label-md text-label-md text-primary"><span id="grid-rejected-count">1</span> Rejected</span>
+</div>
+</div>
+<!-- 5-Card Responsive Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg" id="gift-cards-container">
+<!-- Cards rendered dynamically by JS -->
+</div>
+<!-- Sticky Bottom Action Bar -->
+<div class="sticky bottom-4 z-30 w-full bg-surface-container-lowest/95 backdrop-blur-md rounded-xl shadow-lg p-space-md flex flex-wrap items-center justify-between gap-space-md">
+<button class="px-space-lg py-2.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-all font-label-lg text-label-lg flex items-center gap-space-xs cursor-pointer" id="btn-replace-rejected" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+<span>Replace Rejected Slots</span>
+</button>
+<button class="px-space-lg py-2.5 rounded-full bg-primary text-on-primary hover:bg-primary-container transition-all shadow-md font-label-lg text-label-lg flex items-center gap-space-xs cursor-pointer active:scale-95" id="btn-view-shortlist" type="button">
+<span>View Final Shortlist (<span id="btn-shortlist-count">2</span>)</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</button>
+</div>
+</section>
+<!-- SCREEN 4: FINAL SHORTLIST & SHARE -->
+<section class="screen-view hidden w-full max-w-7xl mx-auto px-margin-laptop py-space-xl flex flex-col gap-space-xl" id="screen-shortlist">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary">Step 04 / Ready to Share</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Final Shortlist &amp; Share</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Review your accepted picks, refine your personal note, and copy or share.</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-space-lg py-space-sm rounded-xl flex items-center gap-space-md shadow-sm">
+<span class="font-label-md text-label-md">Estimated Total:</span>
+<span class="font-headline-md text-headline-md" id="shortlist-total-price">$113</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left: Accepted Gift Cards -->
+<div class="lg:col-span-7 flex flex-col gap-space-md" id="shortlist-items-container">
+<!-- Rendered by JS -->
+</div>
+<!-- Right: Editable Note & Plaintext Summary -->
+<div class="lg:col-span-5 flex flex-col gap-space-lg">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-md">
+<label class="font-label-lg text-label-lg text-on-surface" for="shortlist-note">Editable "Why it fits" Note</label>
+<textarea class="w-full px-space-md py-2.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md shadow-inner focus:outline-none resize-none" id="shortlist-note" rows="3">Thoughtfully curated for Maya's love of slow pour-over mornings and warm, tactile desk tools.</textarea>
+<div class="flex flex-col gap-space-xs pt-space-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-tertiary">Plaintext Summary Preview</span>
+<pre class="w-full p-space-md rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm whitespace-pre-wrap break-words" id="shortlist-plaintext"></pre>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-space-sm">
+<button class="flex-1 py-3 px-space-md rounded-full bg-primary text-on-primary hover:bg-primary-container transition-all shadow-md font-label-lg text-label-lg flex items-center justify-center gap-space-xs cursor-pointer active:scale-95" id="btn-copy-summary" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+<span id="copy-btn-label">Copy Summary</span>
+</button>
+<button class="py-3 px-space-lg rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-fixed-variant transition-all shadow-sm font-label-lg text-label-lg flex items-center justify-center gap-space-xs cursor-pointer" id="btn-share-summary" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+<span id="share-btn-label">Share</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<script>
+    (function () {
+      const screens = {
+        access: document.getElementById('screen-access'),
+        workspace: document.getElementById('screen-workspace'),
+        grid: document.getElementById('screen-grid'),
+        shortlist: document.getElementById('screen-shortlist')
+      };
+
+      const navPills = document.querySelectorAll('.nav-pill');
+
+      function showScreen(name) {
+        Object.keys(screens).forEach((key) => {
+          if (key === name) {
+            screens[key].classList.remove('hidden');
+          } else {
+            screens[key].classList.add('hidden');
+          }
+        });
+
+        navPills.forEach((pill) => {
+          const target = pill.getAttribute('data-nav');
+          if (target === name) {
+            pill.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant', 'hover:bg-surface-container-high');
+            pill.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+          } else {
+            pill.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+            pill.classList.add('bg-surface-container-lowest', 'text-on-surface-variant', 'hover:bg-surface-container-high');
+          }
+        });
+
+        if (name === 'grid') {
+          const nick = document.getElementById('ws-nickname').value.trim() || 'Your Recipient';
+          document.getElementById('grid-recipient-name').textContent = nick.split(' ')[0];
+          renderGrid();
+        }
+        if (name === 'shortlist') {
+          renderShortlist();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Nav pill clicks
+      navPills.forEach((pill) => {
+        pill.addEventListener('click', () => showScreen(pill.getAttribute('data-nav')));
+      });
+
+      // Reset button
+      document.getElementById('btn-reset-person').addEventListener('click', () => {
+        document.getElementById('ws-nickname').value = '';
+        document.getElementById('ws-likes').value = '';
+        showScreen('workspace');
+      });
+
+      // Screen 1 -> Screen 2
+      document.getElementById('btn-access-continue').addEventListener('click', () => showScreen('workspace'));
+
+      // Screen 2: Presets
+      const presets = {
+        coffee: {
+          nickname: 'Maya (Studio Pal)',
+          occasion: 'Birthday',
+          currency: 'USD $',
+          min: 35,
+          max: 90,
+          likes: 'Pour-over coffee rituals, tactile stationery, warm brass desk accents, quiet weekend reading'
+        },
+        apartment: {
+          nickname: 'Sam & Priya (New Place)',
+          occasion: 'Housewarming',
+          currency: 'USD $',
+          min: 45,
+          max: 110,
+          likes: 'Hosting casual dinners, linen table runners, indoor herbs, ceramic serving bowls'
+        },
+        traveler: {
+          nickname: 'Jordan (Weekend Flyer)',
+          occasion: 'Thank You',
+          currency: 'USD $',
+          min: 30,
+          max: 85,
+          likes: 'Carry-on organization, compact analog cameras, merino wool layers, airport coffee'
+        }
+      };
+
+      document.querySelectorAll('.preset-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const p = presets[btn.getAttribute('data-preset')];
+          if (!p) return;
+          document.getElementById('ws-nickname').value = p.nickname;
+          document.getElementById('ws-currency').value = p.currency;
+          document.getElementById('ws-budget-min').value = p.min;
+          document.getElementById('ws-budget-max').value = p.max;
+          document.getElementById('ws-likes').value = p.likes;
+
+          document.querySelectorAll('.occasion-chip').forEach((chip) => {
+            if (chip.getAttribute('data-occasion') === p.occasion) {
+              chip.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+              chip.classList.add('bg-secondary', 'text-on-secondary', 'shadow-sm');
+            } else {
+              chip.classList.remove('bg-secondary', 'text-on-secondary', 'shadow-sm');
+              chip.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+            }
+          });
+        });
+      });
+
+      // Occasion chips
+      document.querySelectorAll('.occasion-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('.occasion-chip').forEach((c) => {
+            c.classList.remove('bg-secondary', 'text-on-secondary', 'shadow-sm');
+            c.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          });
+          chip.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+          chip.classList.add('bg-secondary', 'text-on-secondary', 'shadow-sm');
+        });
+      });
+
+      // Guardrail chips toggle
+      document.querySelectorAll('.guard-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const isAvoid = chip.parentElement.id === 'avoid-chips';
+          const activeBg = isAvoid ? 'bg-primary' : 'bg-secondary';
+          const activeText = isAvoid ? 'text-on-primary' : 'text-on-secondary';
+
+          if (chip.classList.contains(activeBg)) {
+            chip.classList.remove(activeBg, activeText, 'shadow-sm');
+            chip.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          } else {
+            chip.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+            chip.classList.add(activeBg, activeText, 'shadow-sm');
+          }
+        });
+      });
+
+      // Optional details toggle
+      document.getElementById('toggle-optional-btn').addEventListener('click', () => {
+        const panel = document.getElementById('optional-details-panel');
+        const chevron = document.getElementById('optional-chevron');
+        panel.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-180');
+      });
+
+      // Screen 2 -> Screen 3
+      document.getElementById('btn-find-ideas').addEventListener('click', () => showScreen('grid'));
+
+      // Screen 3: 5-Slot Gift Data
+      let giftSlots = [
+        {
+          slot: 1,
+          title: 'Fellow Stagg Pour-Over Kettle',
+          desc: 'Precision gooseneck kettle with matte finish for slow, controlled morning brews.',
+          price: 68,
+          why: 'Elevates her daily pour-over ritual without cluttering the counter.',
+          status: 'accepted'
+        },
+        {
+          slot: 2,
+          title: 'Brass & Walnut Desk Pen Rest',
+          desc: 'Weighted solid brass pen tray with a warm oiled walnut base.',
+          price: 45,
+          why: 'Matches her love for tactile stationery and warm brass desk accents.',
+          status: 'accepted'
+        },
+        {
+          slot: 3,
+          title: 'Midori MD Cotton Notebook Set',
+          desc: 'Lay-flat Japanese cotton paper notebooks designed for fountain & gel pens.',
+          price: 38,
+          why: 'A quiet, tactile upgrade for weekend journaling and studio notes.',
+          status: 'neutral'
+        },
+        {
+          slot: 4,
+          title: 'Ceramic Espresso Tasting Cups',
+          desc: 'Hand-thrown stoneware pair in speckled oatmeal glaze.',
+          price: 52,
+          why: 'Complements her coffee setup, though she may already have favorite mugs.',
+          status: 'rejected'
+        },
+        {
+          slot: 5,
+          title: 'Warm Amber LED Desk Lamp',
+          desc: 'Compact cordless brass-toned task lamp with 3-step warm dimming.',
+          price: 74,
+          why: 'Creates cozy evening light for her quiet weekend reading.',
+          status: 'neutral'
+        }
+      ];
+
+      const replacementPool = [
+        {
+          title: 'Japanese Linen Bookmarks & Clips',
+          desc: 'Set of 3 etched brass page markers with woven linen tabs.',
+          price: 28,
+          why: 'Thoughtful companion for her weekend reading stack.'
+        },
+        {
+          title: 'Single-Origin Coffee Tasting Flight',
+          desc: 'Four 100g whole-bean bags roasted for clean pour-over clarity.',
+          price: 42,
+          why: 'Consumable, fresh, and tailored to pour-over brewing.'
+        },
+        {
+          title: 'Leather & Felt Desk Mat',
+          desc: 'Soft merino wool felt desk pad that warms up any studio table.',
+          price: 58,
+          why: 'Frames her tactile stationery and keyboard neatly.'
+        }
+      ];
+      let replaceIdx = 0;
+
+      function updateCounts() {
+        const accepted = giftSlots.filter((g) => g.status === 'accepted').length;
+        const rejected = giftSlots.filter((g) => g.status === 'rejected').length;
+        document.getElementById('grid-accepted-count').textContent = accepted;
+        document.getElementById('grid-rejected-count').textContent = rejected;
+        document.getElementById('btn-shortlist-count').textContent = accepted;
+        document.getElementById('nav-shortlist-count').textContent = accepted;
+      }
+
+      function renderGrid() {
+        const container = document.getElementById('gift-cards-container');
+        container.innerHTML = '';
+
+        giftSlots.forEach((item, idx) => {
+          const isAccepted = item.status === 'accepted';
+          const isRejected = item.status === 'rejected';
+
+          const card = document.createElement('div');
+          card.className = 'bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col justify-between gap-space-md transition-all hover:shadow-md';
+
+          const statusBadge = isAccepted
+            ? '<span class="px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Accepted</span>'
+            : isRejected
+            ? '<span class="px-space-sm py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm">Rejected</span>'
+            : '<span class="px-space-sm py-0.5 rounded-full bg-surface-container text-tertiary font-label-sm text-label-sm">Draft</span>';
+
+          card.innerHTML = `
+            <div class="flex flex-col gap-space-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-tertiary">Slot 0${item.slot}</span>
+                ${statusBadge}
+              </div>
+              <div class="flex items-start justify-between gap-space-sm">
+                <h3 class="font-headline-sm text-headline-sm text-on-surface">${item.title}</h3>
+                <span class="font-headline-sm text-headline-sm text-primary shrink-0">$${item.price}</span>
+              </div>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">${item.desc}</p>
+              <div class="p-space-sm rounded-lg bg-surface-container-low">
+                <span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Why it fits</span>
+                <p class="font-body-sm text-body-sm text-on-surface mt-0.5">${item.why}</p>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-space-sm pt-space-xs">
+              <div class="flex items-center gap-space-xs">
+                <a href="#exact-${item.slot}" onclick="return false;" class="flex-1 text-center py-1.5 px-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors">Exact Link ↗</a>
+                <a href="#search-${item.slot}" onclick="return false;" class="flex-1 text-center py-1.5 px-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors">Search Link ↗</a>
+              </div>
+              <p class="font-label-sm text-label-sm text-tertiary text-center">Verify link &amp; price yourself</p>
+              <div class="grid grid-cols-2 gap-space-xs pt-space-xs">
+                <button type="button" data-action="accept" data-idx="${idx}" class="py-2 rounded-full font-label-md text-label-md transition-all cursor-pointer ${isAccepted ? 'bg-secondary text-on-secondary shadow-sm' : 'bg-surface-container-low text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-container'}">
+                  ${isAccepted ? '✓ Accepted' : 'Accept'}
+                </button>
+                <button type="button" data-action="reject" data-idx="${idx}" class="py-2 rounded-full font-label-md text-label-md transition-all cursor-pointer ${isRejected ? 'bg-error text-on-error shadow-sm' : 'bg-surface-container-low text-on-surface-variant hover:bg-error-container hover:text-on-error-container'}">
+                  ${isRejected ? '✕ Rejected' : 'Reject'}
+                </button>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        container.querySelectorAll('button[data-action]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.getAttribute('data-idx'), 10);
+            const action = btn.getAttribute('data-action');
+            if (action === 'accept') {
+              giftSlots[idx].status = giftSlots[idx].status === 'accepted' ? 'neutral' : 'accepted';
+            } else {
+              giftSlots[idx].status = giftSlots[idx].status === 'rejected' ? 'neutral' : 'rejected';
+            }
+            renderGrid();
+          });
+        });
+
+        updateCounts();
+      }
+
+      document.getElementById('btn-replace-rejected').addEventListener('click', () => {
+        let replaced = false;
+        giftSlots = giftSlots.map((item) => {
+          if (item.status === 'rejected') {
+            replaced = true;
+            const next = replacementPool[replaceIdx % replacementPool.length];
+            replaceIdx++;
+            return {
+              slot: item.slot,
+              title: next.title,
+              desc: next.desc,
+              price: next.price,
+              why: next.why,
+              status: 'neutral'
+            };
+          }
+          return item;
+        });
+        if (replaced) renderGrid();
+      });
+
+      document.getElementById('btn-view-shortlist').addEventListener('click', () => showScreen('shortlist'));
+
+      // Screen 4: Final Shortlist & Share
+      function updatePlaintext(acceptedItems, total) {
+        const nick = document.getElementById('ws-nickname').value.trim() || 'Maya';
+        const note = document.getElementById('shortlist-note').value.trim();
+        const lines = acceptedItems.map((item, i) => `${i + 1}. ${item.title} (~$${item.price}) — ${item.why}`);
+        const summary = `Gift Shortlist for ${nick}\nEstimated Total: $${total}\n\n${lines.join('\n')}\n\nNote: ${note}`;
+        document.getElementById('shortlist-plaintext').textContent = summary;
+      }
+
+      function renderShortlist() {
+        const accepted = giftSlots.filter((g) => g.status === 'accepted');
+        const list = accepted.length > 0 ? accepted : giftSlots.slice(0, 2);
+        const total = list.reduce((sum, item) => sum + item.price, 0);
+
+        document.getElementById('shortlist-total-price').textContent = `$${total}`;
+        const container = document.getElementById('shortlist-items-container');
+        container.innerHTML = '';
+
+        list.forEach((item) => {
+          const row = document.createElement('div');
+          row.className = 'bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col sm:flex-row sm:items-center justify-between gap-space-md';
+          row.innerHTML = `
+            <div class="flex flex-col gap-space-xs">
+              <div class="flex items-center gap-space-xs">
+                <span class="px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Slot 0${item.slot}</span>
+                <h3 class="font-headline-sm text-headline-sm text-on-surface">${item.title}</h3>
+              </div>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">${item.desc}</p>
+            </div>
+            <div class="font-headline-md text-headline-md text-primary shrink-0">$${item.price}</div>
+          `;
+          container.appendChild(row);
+        });
+
+        updatePlaintext(list, total);
+      }
+
+      document.getElementById('shortlist-note').addEventListener('input', () => {
+        const accepted = giftSlots.filter((g) => g.status === 'accepted');
+        const list = accepted.length > 0 ? accepted : giftSlots.slice(0, 2);
+        const total = list.reduce((sum, item) => sum + item.price, 0);
+        updatePlaintext(list, total);
+      });
+
+      document.getElementById('btn-copy-summary').addEventListener('click', () => {
+        const text = document.getElementById('shortlist-plaintext').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(() => {});
+        }
+        const label = document.getElementById('copy-btn-label');
+        label.textContent = 'Copied!';
+        setTimeout(() => {
+          label.textContent = 'Copy Summary';
+        }, 1800);
+      });
+
+      document.getElementById('btn-share-summary').addEventListener('click', () => {
+        const label = document.getElementById('share-btn-label');
+        label.textContent = 'Ready to Share!';
+        setTimeout(() => {
+          label.textContent = 'Share';
+        }, 1800);
+      });
+
+      updateCounts();
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low py-space-lg shadow-[0_-1px_8px_rgba(0,0,0,0.02)]"><div class="max-w-7xl mx-auto px-margin-laptop flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant"><div class="flex items-center gap-space-sm"><div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container"><span class="material-symbols-outlined text-[14px]">card_giftcard</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Gift Idea Finder</span><span class="text-body-sm font-body-sm text-tertiary ml-space-xs">• Editorial Gift Discovery</span></div><div class="flex items-center gap-space-lg text-body-sm font-body-sm"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-secondary">lock</span> Local private curation</span><span class="text-tertiary">© 2025 Gift Idea Finder</span></div></div></footer>
+</body></html>
