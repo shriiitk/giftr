@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  AlertTriangle,
   Check,
   CheckCircle2,
   ExternalLink,
@@ -53,6 +52,8 @@ export default function IdeaCard({
   const meta = STATUS_META[idea.status];
   const StatusIcon = meta.icon;
   const exactUrl = safeExternalUrl(idea.exactUrl);
+  const searchUrl = safeExternalUrl(idea.searchUrl);
+  const shopUrl = safeExternalUrl(idea.shopUrl) ?? searchUrl;
   const accepted = idea.status === "accepted";
   const rejected = idea.status === "rejected";
   const acceptDisabled = acceptLimitReached && !accepted;
@@ -99,45 +100,25 @@ export default function IdeaCard({
 
       <div className="flex flex-col gap-2.5">
         <div className="grid grid-cols-2 gap-2">
-          {exactUrl ? (
-            <a
-              href={exactUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-soft btn-sm w-full"
-            >
-              <ExternalLink className="size-3.5" aria-hidden="true" />
-              Exact link
-            </a>
-          ) : (
-            <span
-              className="btn btn-soft btn-sm w-full cursor-not-allowed opacity-55"
-              aria-disabled="true"
-              title="No exact product link was returned for this idea"
-            >
-              <ExternalLink className="size-3.5" aria-hidden="true" />
-              No exact link
-            </span>
-          )}
           <a
-            href={idea.searchUrl}
+            href={exactUrl ?? shopUrl ?? "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-soft btn-sm w-full"
+            title={exactUrl ? "Open the product page" : "Search this item on Amazon"}
+          >
+            <ExternalLink className="size-3.5" aria-hidden="true" />
+            {exactUrl ? "Product page" : "Find on Amazon"}
+          </a>
+          <a
+            href={searchUrl ?? shopUrl ?? "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-soft btn-sm w-full"
           >
             <Search className="size-3.5" aria-hidden="true" />
-            Search link
+            Check options
           </a>
-        </div>
-
-        <div className="flex items-start gap-1.5 rounded-lg border border-line/70 bg-[#FBF8F3] px-2.5 py-2 text-[10px] leading-4 text-muted">
-          <AlertTriangle className="mt-0.5 size-3 shrink-0 text-primary" aria-hidden="true" />
-          <span>
-            <strong className="font-bold text-ink">
-              Verify link &amp; live price yourself before buying.
-            </strong>{" "}
-            Estimates can change or be inaccurate.
-          </span>
         </div>
 
         {rejected ? (

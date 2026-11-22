@@ -139,6 +139,8 @@ export default function Shortlist({
           <div className="flex flex-col gap-3 lg:col-span-7">
             {sorted.map((idea, index) => {
               const exactUrl = safeExternalUrl(idea.exactUrl);
+              const searchUrl = safeExternalUrl(idea.searchUrl);
+              const shopUrl = safeExternalUrl(idea.shopUrl) ?? searchUrl;
               return (
                 <article key={idea.id} className="card p-4 sm:p-5">
                   <div className="flex items-start justify-between gap-3">
@@ -170,30 +172,24 @@ export default function Shortlist({
                   </div>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-                    {exactUrl ? (
-                      <a
-                        href={exactUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-soft btn-sm"
-                      >
-                        <ExternalLink className="size-3.5" aria-hidden="true" />
-                        Exact link
-                      </a>
-                    ) : (
-                      <span className="btn btn-soft btn-sm cursor-not-allowed opacity-55">
-                        <ExternalLink className="size-3.5" aria-hidden="true" />
-                        No exact link
-                      </span>
-                    )}
                     <a
-                      href={idea.searchUrl}
+                      href={exactUrl ?? shopUrl ?? "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-soft btn-sm"
+                      title={exactUrl ? "Open the product page" : "Search this item on Amazon"}
+                    >
+                      <ExternalLink className="size-3.5" aria-hidden="true" />
+                      {exactUrl ? "Product page" : "Find on Amazon"}
+                    </a>
+                    <a
+                      href={searchUrl ?? shopUrl ?? "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-soft btn-sm"
                     >
                       <Search className="size-3.5" aria-hidden="true" />
-                      Search link
+                      Check options
                     </a>
                     <button
                       type="button"
@@ -209,10 +205,10 @@ export default function Shortlist({
             })}
 
             <p className="rounded-lg border border-line/70 bg-[#FBF8F3] px-3 py-2.5 text-[11px] leading-5 text-muted">
-              <strong className="font-bold text-ink">
-                Verify every link and live price yourself before buying.
-              </strong>{" "}
-              Prices are model estimates, not live quotes.
+              <strong className="font-bold text-ink">Prices are estimates.</strong>{" "}
+              Use <span className="font-semibold text-ink">Find on Amazon</span> or{" "}
+              <span className="font-semibold text-ink">Check options</span> to verify the
+              live price and availability before buying.
             </p>
           </div>
 

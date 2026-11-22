@@ -136,7 +136,7 @@ npm run verify   # lint + typecheck + test + build
 
 - No database, no server logs containing recipient briefs.
 - Cookie payload contains only the email and expiry, is `HttpOnly`, and expires after 7 days.
-- Client state is lost on refresh by design. Nothing is written to `localStorage`.
+- The workspace is saved in the browser under `giftr_workspace_v1:<email>` so a refresh restores it and friends sharing a browser stay isolated. New Person / Reset and sign-out clear it. No brief data is stored server-side.
 
 ### Caching
 

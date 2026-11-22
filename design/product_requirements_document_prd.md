@@ -32,9 +32,9 @@ Buying a thoughtful gift for someone you know well is surprisingly difficult—n
   - Each friend can receive a distinct code so one code can be revoked without affecting everyone else. The legacy single `INVITE_CODE` remains supported as a fallback when `INVITE_CODES` is not set.
   - Validating both issues a signed, `HttpOnly` session cookie so friends remain signed in during their session while blocking uninvited public visitors and bots from consuming free-tier **Gemini API** credits.
 
-### Privacy & Ephemeral Session Hygiene
+### Privacy & Browser-Local Session Hygiene
 - **PII Guardrail:** The UI displays a clear privacy reminder instructing users to enter a nickname or persona label only—**never** full names, street addresses, phone numbers, or sensitive personal data.
-- **Ephemeral Client/Session State:** Active recipient inputs, the 5-slot board, locked finalists, and *"Why it fits"* notes reside in active browser/session state rather than a persistent database.
+- **Browser-Local State:** Active recipient inputs, the 5-slot board, locked finalists, and *"Why it fits"* notes are saved in this browser so a refresh restores them, and are cleared by an explicit New Person / Reset or sign-out. No database or server-side brief storage is used.
 
 ---
 

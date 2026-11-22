@@ -2,7 +2,7 @@
   "name": "giftr",
   "version": "1.0.0",
   "private": true,
-  "description": "Gift Idea Finder — a private, ephemeral gift shortlist workspace for friends.",
+  "description": "Gift Idea Finder — a private gift shortlist workspace for friends.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

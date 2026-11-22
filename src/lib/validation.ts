@@ -189,9 +189,11 @@ export function parseIdeasRequest(input: unknown): ValidationResult<IdeasRoundPa
   const slots = readSlots(input);
   if (!slots.ok) return slots;
 
-  const acceptedTitles = readStringArray(input, "acceptedTitles", "Accepted titles", 10, 160);
+  // Keep a longer rejection history so a card that was replaced earlier in the
+  // session is still excluded from later replacement rounds.
+  const acceptedTitles = readStringArray(input, "acceptedTitles", "Accepted titles", 100, 160);
   if (!acceptedTitles.ok) return acceptedTitles;
-  const rejectedTitles = readStringArray(input, "rejectedTitles", "Rejected titles", 10, 160);
+  const rejectedTitles = readStringArray(input, "rejectedTitles", "Rejected titles", 100, 160);
   if (!rejectedTitles.ok) return rejectedTitles;
 
   return {

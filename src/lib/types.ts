@@ -47,6 +47,7 @@ export interface GiftIdea {
   whyItFits: string;
   exactUrl: string | null;
   searchUrl: string;
+  shopUrl: string;
   status: IdeaStatus;
   rejectionReason: string | null;
 }
@@ -60,6 +61,7 @@ export interface GeneratedIdeaDTO {
   whyItFits: string;
   exactUrl: string | null;
   searchUrl: string;
+  shopUrl: string;
 }
 
 export interface IdeasRoundResponse {
@@ -90,10 +92,17 @@ export type WorkspaceView = "intake" | "grid" | "shortlist";
 
 export const REJECTION_REASONS = [
   "Too expensive",
+  "Over budget",
   "Wrong style",
+  "Not their taste",
   "Too similar",
+  "Already owns it",
   "Not available",
   "Already considered",
+  "Too generic",
+  "Not useful",
+  "Wrong size or fit",
+  "Delivery risk",
 ] as const;
 
 export type RejectionReason = (typeof REJECTION_REASONS)[number];

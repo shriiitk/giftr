@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AlertTriangle,
   ArrowRight,
   CheckCircle2,
   Loader2,
@@ -125,9 +126,24 @@ export default function IdeaGrid({
               </p>
             </div>
           </div>
-          <span className="text-[11px] text-muted">
-            Budget: {brief.currency} {brief.budgetMin.toLocaleString()}–
-            {brief.budgetMax.toLocaleString()}
+          <div className="flex flex-col gap-0.5 sm:items-end">
+            <span className="text-[11px] text-muted">
+              Budget: {brief.currency} {brief.budgetMin.toLocaleString()}–
+              {brief.budgetMax.toLocaleString()}
+            </span>
+            <span className="text-[10px] text-muted/80">
+              Saved in this browser · reset to clear
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-start gap-2.5 rounded-xl border border-line/70 bg-[#FBF8F3] px-3.5 py-3 text-[11px] leading-5 text-muted">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+          <span>
+            <strong className="font-bold text-ink">Prices are estimates.</strong>{" "}
+            Use <span className="font-semibold text-ink">Find on Amazon</span> or{" "}
+            <span className="font-semibold text-ink">Check options</span> to verify the
+            live price, availability, and exact product before buying.
           </span>
         </div>
 

@@ -1,10 +1,15 @@
 "use client";
 
-import { AlertCircle, LogIn, X } from "lucide-react";
+import { AlertCircle, Loader2, LogIn, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createEmptyBrief, validateBriefForm, type BriefErrors } from "@/lib/brief";
 import { currencyLabel } from "@/lib/currency";
+import {
+  clearWorkspace,
+  loadWorkspace,
+  saveWorkspace,
+} from "@/lib/persistence";
 import type {
   ActiveBrief,
   BriefFormState,
@@ -47,6 +52,7 @@ function toGiftIdea(dto: GeneratedIdeaDTO): GiftIdea {
     whyItFits: dto.whyItFits,
     exactUrl: dto.exactUrl,
     searchUrl: dto.searchUrl,
+    shopUrl: dto.shopUrl || dto.searchUrl,
     status: "reviewing",
     rejectionReason: null,
   };
@@ -56,6 +62,7 @@ async function requestIdeas(
   brief: ActiveBrief,
   slots: number[],
   currentIdeas: GiftIdea[],
+  rejectedHistory: string[] = [],
 ): Promise<GeneratedIdeaDTO[]> {
   const response = await fetch("/api/ideas/round", {
     method: "POST",
@@ -77,9 +84,14 @@ async function requestIdeas(
       acceptedTitles: currentIdeas
         .filter((idea) => idea.status === "accepted")
         .map((idea) => idea.title),
-      rejectedTitles: currentIdeas
-        .filter((idea) => idea.status === "rejected")
-        .map((idea) => idea.title),
+      rejectedTitles: Array.from(
+        new Set([
+          ...rejectedHistory,
+          ...currentIdeas
+            .filter((idea) => idea.status === "rejected")
+            .map((idea) => idea.title),
+        ]),
+      ),
     }),
   });
 
@@ -126,6 +138,35 @@ export default function Workspace({ initialEmail }: WorkspaceProps) {
   const [sessionExpired, setSessionExpired] = useState(false);
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const [resetOpen, setResetOpen] = useState(false);
+  const [rejectedTitles, setRejectedTitles] = useState<string[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+  const skipNextSave = useRef(false);
+
+  useEffect(() => {
+    // Browser storage can only be read after mount, so this one-time hydration
+    // sync intentionally sets state from the external snapshot.
+    /* eslint-disable react-hooks/set-state-in-effect -- one-time hydration from localStorage */
+    const saved = loadWorkspace(initialEmail);
+    if (saved) {
+      setBrief(saved.brief);
+      setActiveBrief(saved.activeBrief);
+      setIdeas(saved.ideas);
+      setNote(saved.note);
+      setView(saved.view);
+      setRejectedTitles(saved.rejectedTitles);
+    }
+    setHydrated(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [initialEmail]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      return;
+    }
+    saveWorkspace(initialEmail, { brief, activeBrief, ideas, note, view, rejectedTitles });
+  }, [hydrated, initialEmail, brief, activeBrief, ideas, note, view, rejectedTitles]);
 
   const accepted = ideas.filter((idea) => idea.status === "accepted");
   const acceptedCount = accepted.length;
@@ -177,6 +218,7 @@ export default function Workspace({ initialEmail }: WorkspaceProps) {
       const dtos = await requestIdeas(validation.brief, slots, []);
       setActiveBrief(validation.brief);
       setIdeas(dtos.map(toGiftIdea));
+      setRejectedTitles([]);
       setNote("");
       setView("grid");
       pushToast({
@@ -223,14 +265,24 @@ export default function Workspace({ initialEmail }: WorkspaceProps) {
   }
 
   function handleReject(id: string) {
+    const target = ideas.find((idea) => idea.id === id);
+    if (!target) return;
+
+    const nextStatus = target.status === "rejected" ? "reviewing" : "rejected";
+    if (nextStatus === "rejected") {
+      setRejectedTitles((previous) =>
+        previous.some(
+          (title) => title.toLowerCase() === target.title.toLowerCase(),
+        )
+          ? previous
+          : [...previous, target.title],
+      );
+    }
+
     setIdeas((previous) =>
       previous.map((idea) =>
         idea.id === id
-          ? {
-              ...idea,
-              status: idea.status === "rejected" ? "reviewing" : "rejected",
-              rejectionReason: null,
-            }
+          ? { ...idea, status: nextStatus, rejectionReason: null }
           : idea,
       ),
     );
@@ -259,7 +311,7 @@ export default function Workspace({ initialEmail }: WorkspaceProps) {
     setError(null);
 
     try {
-      const dtos = await requestIdeas(activeBrief, slots, ideas);
+      const dtos = await requestIdeas(activeBrief, slots, ideas, rejectedTitles);
       const replacements = new Map<number, GiftIdea>();
       for (const dto of dtos) {
         replacements.set(dto.slot, toGiftIdea(dto));
@@ -349,11 +401,14 @@ export default function Workspace({ initialEmail }: WorkspaceProps) {
     setBriefErrors({});
     setActiveBrief(null);
     setIdeas([]);
+    setRejectedTitles([]);
     setNote("");
     setView("intake");
     setError(null);
     setSessionExpired(false);
     setResetOpen(false);
+    skipNextSave.current = true;
+    clearWorkspace(initialEmail);
     pushToast({
       message: keepDefaults
         ? "Workspace cleared. Currency and location kept."
@@ -368,6 +423,8 @@ export default function Workspace({ initialEmail }: WorkspaceProps) {
     try {
       const response = await fetch("/api/auth/logout", { method: "POST" });
       if (!response.ok) throw new Error("Logout failed");
+      skipNextSave.current = true;
+      clearWorkspace(initialEmail);
       router.refresh();
     } catch {
       pushToast({ message: "Could not sign out. Please try again.", tone: "error" });
@@ -378,6 +435,22 @@ export default function Workspace({ initialEmail }: WorkspaceProps) {
 
   const displayCurrency =
     brief.currency === "CUSTOM" ? brief.currencyCustom : brief.currency;
+
+  if (!hydrated) {
+    return (
+      <>
+        <Header authenticated email={initialEmail} />
+        <main className="shell py-10 md:py-16">
+          <div className="card mx-auto flex max-w-xl flex-col items-center gap-3 p-8 text-center">
+            <Loader2 className="size-6 animate-spin text-primary" aria-hidden="true" />
+            <p className="text-sm leading-6 text-muted">
+              Restoring your saved workspace…
+            </p>
+          </div>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>

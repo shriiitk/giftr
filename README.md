@@ -1,8 +1,8 @@
 # giftr — Gift Idea Finder
 
-A private, ephemeral gift-shortlist workspace for a small circle of friends.
+A private gift-shortlist workspace for a small circle of friends.
 
-Describe a recipient with a privacy-safe nickname, an occasion, a budget range, and a few interests. `giftr` generates **5 gift ideas**, lets you accept/reject cards and replace rejected slots, then narrows to **2–3 finalists** with a copyable/shareable summary. There is **no database** and **no long-term storage** — the brief and shortlist live in the browser session only.
+Describe a recipient with a privacy-safe nickname, an occasion, a budget range, and a few interests. `giftr` generates **5 gift ideas**, lets you accept/reject cards and replace rejected slots, then narrows to **2–3 finalists** with a copyable/shareable summary. There is **no database** and **no server-side brief storage** — the workspace is saved in this browser so a refresh keeps your work, and an explicit **New Person / Reset** clears it.
 
 ---
 
@@ -30,10 +30,10 @@ Describe a recipient with a privacy-safe nickname, an occasion, a budget range, 
 
 - **Friend access gate** — allowlisted email + a personal invite code. No passwords, no accounts.
 - **Recipient intake** — nickname/persona, occasion, currency, min/max budget, likes, and optional age/gender/location/job. Includes “already owns” and “do not want” chips plus free text.
-- **5-slot idea board** — one generation returns 5 ideas within budget, each with a title, description, estimated price, “why it fits” rationale, an exact link when available, and a safe search link.
-- **Accept / reject / replace** — accept up to 3 finalists; reject cards with an optional reason; “Replace rejected” refills only the rejected slots and keeps accepted cards in place.
+- **5-slot idea board** — one generation returns 5 ideas within budget, each with a title, description, estimated price, “why it fits” rationale, a product page when available (otherwise an Amazon search fallback), and a Google “Check options” link.
+- **Accept / reject / replace** — accept up to 3 finalists; reject cards with an optional reason; “Replace rejected” refills only the rejected slots and keeps accepted cards in place. A card rejected earlier in the session is excluded from later replacement rounds.
 - **Shortlist (2–3)** — requires at least 2 accepted ideas. Add a personal “why it fits” note, then copy the summary or use the native share sheet.
-- **Ephemeral by design** — refresh clears client state; nothing is written to `localStorage` or a database.
+- **Browser-local by design** — the brief, cards, finalists, note, and rejection history survive a refresh via an email-scoped `localStorage` snapshot; only an explicit reset or sign-out clears them. No database or server-side brief storage.
 - **Quota protection** — allowlist + invite codes + signed session cookie + per-session rate limiting protect the free-tier LLM quota.
 
 ### Access model
@@ -64,7 +64,7 @@ Browser
   └─ POST /api/auth/logout ► clear cookie
 ```
 
-- **No database.** The brief, cards, finalists, and note are React state in the browser.
+- **No database.** The brief, cards, finalists, note, and rejection history live in React state, with a versioned, email-scoped `localStorage` snapshot (`giftr_workspace_v1:<email>`) for refresh resilience.
 - **No server-side brief storage.** API routes return `Cache-Control: no-store`.
 - **LLM keys never reach the browser.** All provider calls happen server-side.
 - **Rate limits are in-memory per server instance.** Default: 8 idea generations per 10 minutes per session email. Restarting `next dev` resets them.
@@ -303,7 +303,7 @@ The stub provider never calls the network. It picks from a fixed pool using a se
 
 ### Run the suite
 
-The suite currently contains **67 tests across 8 files**, runs quickly, and needs no network or API key.
+The suite currently contains **78 tests across 11 files**, runs quickly, and needs no network or API key.
 
 ```bash
 npm test
@@ -328,11 +328,14 @@ npx vitest run tests/auth.test.ts
 | `tests/auth.test.ts` | Allowlist parsing, invite-code validation, credential errors, session token sign/verify/expiry |
 | `tests/login-route.test.ts` | `POST /api/auth/login` success, bad credentials, missing config, cookie behavior |
 | `tests/ideas-route.test.ts` | Auth required, slot generation, defaults, invalid payloads, malformed JSON, rate limiting, provider misconfiguration, body-size cap |
+| `tests/ideas-route-exclusions.test.ts` | Rejects provider output that repeats a previously rejected title |
 | `tests/validation.test.ts` | Request validation and 64 KB body guard |
 | `tests/rate-limit.test.ts` | Window/limit behavior and retry-after |
 | `tests/brief.test.ts` | Intake form validation |
 | `tests/stub.test.ts` | Deterministic stub generation, exclusions, budget bounds |
 | `tests/summary.test.ts` | Shortlist summary text and currency formatting |
+| `tests/url.test.ts` | Currency-aware Amazon fallback, Google check-options URL, safe `http:`/`https:` links |
+| `tests/persistence.test.ts` | Browser snapshot round-trip, clearing, malformed/stale data |
 
 Tests run in a Node environment and use the `stub` provider, so they need **no API key and no network**.
 
@@ -379,7 +382,8 @@ Use `LLM_PROVIDER=stub` for a fast, free, offline pass.
 - [ ] **Reject** toggles a card and lets you choose an optional reason.
 - [ ] **Replace rejected** refills only rejected slots; accepted cards stay in place.
 - [ ] Accepted/rejected counts and the shortlist progress indicator update correctly.
-- [ ] External links open in a new tab; the price-verification notice is visible.
+- [ ] External links open in a new tab; the price-verification notice appears once above the board, not on every card.
+- [ ] Reject a card, replace it, then reject and replace again — previously rejected titles do not return.
 
 ### Shortlist
 
@@ -388,14 +392,15 @@ Use `LLM_PROVIDER=stub` for a fast, free, offline pass.
 - [ ] The “why it fits” note is included in the summary.
 - [ ] **Copy summary** places readable text on the clipboard.
 - [ ] **Share** uses the native share sheet when available and falls back to copy.
-- [ ] **New person / reset** clears the workspace; the “keep currency & location” option works.
+- [ ] **New person / reset** clears the workspace and the browser-saved snapshot; the “keep currency & location” option works.
 
 ### Limits and failures
 
 - [ ] Set `IDEAS_RATE_LIMIT=1`, restart, generate twice → second call returns a friendly 429 message.
 - [ ] Stop the network / use an invalid Gemini key → a clear provider error is shown, not a crash.
 - [ ] Rotate `SESSION_SECRET`, restart, refresh → you are signed out.
-- [ ] Refresh the page → workspace state resets (expected; state is ephemeral).
+- [ ] Refresh the page → brief, cards, finalists, and note are restored from this browser.
+- [ ] Click **New Person / Reset** → the saved workspace is cleared and a refresh stays empty.
 
 ### Optional API smoke test
 
@@ -535,7 +540,7 @@ Set the same environment variables in the host’s dashboard, terminate TLS at t
 | Stale or odd build output | Old `.next` artifacts | `rm -rf .next && npm run build` |
 | `npm ci` fails | Lockfile/Node mismatch | Use Node 22 and keep `package-lock.json` committed |
 | Stub ideas look repetitive | Stub uses a small fixed local pool | Use `LLM_PROVIDER=gemini` for varied real generation |
-| Page refreshes lose the shortlist | State is intentionally ephemeral | Expected; copy/share before refreshing |
+| Refresh shows an empty workspace | Browser storage is blocked, private mode is active, or the saved snapshot is from an older schema | Allow storage for the site; the app still works in memory. Use **New Person / Reset** to clear a stale snapshot |
 
 ### Still stuck?
 

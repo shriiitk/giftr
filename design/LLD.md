@@ -19,7 +19,7 @@
 ### In scope
 
 - Allowlisted email + shared invite-code access gate with a **7-day signed cookie**.
-- Ephemeral client-side workspace state (no database, no server-side note storage).
+- Browser-local workspace state with refresh resilience (no database, no server-side note storage).
 - Server-side LLM adapter (Gemini primary, OpenAI-compatible + deterministic stub alternatives).
 - 5-slot board with accept/reject/reason tags and rejected-slot replacement.
 - 2–3 finalist shortlist with copy/share.
@@ -53,7 +53,7 @@ Browser (React client components)
                         └─ StubProvider (local/test)
 ```
 
-**Statelessness:** the browser owns the brief, cards, statuses, and note. Route handlers are stateless apart from an in-memory rate-limit map. A page refresh restarts the workspace (acceptable per PRD; sessionStorage is intentionally not used so no gift data lingers on shared devices).
+**Browser-local state:** the browser owns the brief, cards, statuses, note, view, and rejected-title history. A versioned, email-scoped `localStorage` snapshot (`giftr_workspace_v1:<email>`) restores the workspace on refresh; only an explicit New Person / Reset or sign-out clears it. Route handlers remain stateless apart from an in-memory rate-limit map, and no brief data is stored server-side.
 
 **Rendering model:**
 
@@ -297,7 +297,7 @@ Every ideas request calls `getSessionFromRequest(req)`; missing/invalid → `401
 
 - `slots` is optional; omitted/empty means `[1,2,3,4,5]`.
 - `slots` must be unique integers in `1..5`.
-- `acceptedTitles` / `rejectedTitles` are hints used to avoid duplicates during refill.
+- `acceptedTitles` / `rejectedTitles` are used to avoid duplicates during refill. The client keeps rejected titles for the whole session, so a card replaced earlier cannot return. The route also rejects provider output that repeats an excluded title.
 
 ### 6.2 Response
 
@@ -312,7 +312,8 @@ Every ideas request calls `getSessionFromRequest(req)`; missing/invalid → `401
       "currency": "INR",
       "whyItFits": "Matches the pour-over ritual and avoids the French press they already own.",
       "exactUrl": "https://example.com/product",
-      "searchUrl": "https://www.google.com/search?q=Stoneware%20Pour-Over%20Set%20INR"
+      "searchUrl": "https://www.google.com/search?q=Stoneware%20Pour-Over%20Set%20INR%20buy",
+      "shopUrl": "https://www.amazon.in/s?k=Stoneware%20Pour-Over%20Set"
     }
   ],
   "provider": "gemini",
@@ -320,8 +321,10 @@ Every ideas request calls `getSessionFromRequest(req)`; missing/invalid → `401
 }
 ```
 
-- `exactUrl` is passed through **without server-side validation or fetching** (per PRD). The client only renders it as a link when it parses as `http:`/`https:`; otherwise it displays "No exact link returned".
-- `searchUrl` is always generated from the title + currency, so every card has a safe fallback.
+- `exactUrl` is passed through **without server-side validation or fetching** (per PRD). The client only renders it as a link when it parses as `http:`/`https:`.
+- `shopUrl` is always generated as a currency-aware Amazon search fallback (e.g. `amazon.in` for INR). The UI shows it as “Find on Amazon” when `exactUrl` is absent, so every card still has a live retailer link.
+- `searchUrl` is always generated from the title + currency + location + “buy”, so every card has a Google “Check options” fallback.
+- Prices are model estimates; the UI shows one verification notice above the board rather than one per card.
 - Errors: `400` validation, `401` unauthenticated, `429` rate limited (`Retry-After` header), `502` provider failure, `503` provider not configured, `500` unexpected.
 
 ### 6.3 Validation rules (`src/lib/validation.ts`)
@@ -336,7 +339,8 @@ Every ideas request calls `getSessionFromRequest(req)`; missing/invalid → `401
 | optional context | each ≤ 120 chars |
 | `owns` / `avoid` | arrays ≤ 20 items, each 1–80 chars, de-duplicated case-insensitively |
 | `slots` | ≤ 5 unique integers 1–5 |
-| body | JSON object, ≤ 64 KB (checked via `Content-Length` when present and parse errors) |
+| `acceptedTitles` / `rejectedTitles` | arrays ≤ 100 items, each ≤ 160 chars |
+| body | JSON object, ≤ 64 KB (measured from the request bytes) |
 
 The validator returns `{ ok: true, value }` or `{ ok: false, error }`; it never throws on bad input.
 
@@ -480,12 +484,12 @@ Budget: INR 2,000–INR 5,000 · Estimated total: INR 6,400
 1. Stoneware Pour-Over Set — INR 3,200
    Hand-glazed dripper and carafe for a slower morning ritual.
    Why it fits: Matches the pour-over ritual...
-   Exact link: https://...
-   Search: https://www.google.com/search?q=...
+   Product link: https://...
+   Check options: https://www.google.com/search?q=...
 
 Why it fits: Thoughtful picks for slow mornings.
 
-Please verify links & live prices yourself before buying.
+Prices are estimates. Verify links & live prices yourself before buying.
 ```
 
 - `copyText` uses `navigator.clipboard.writeText`, falling back to a hidden textarea + `document.execCommand("copy")`.
@@ -519,7 +523,7 @@ Accessibility: semantic headings, labeled inputs, `aria-pressed` chips, `aria-li
 - Rate limit keyed by verified session email.
 - Request body size/shape validation; no HTML injection paths (React escapes output).
 - External URLs are not fetched server-side. Client-side href sanitization allows only `http:`/`https:`.
-- No PII persistence: state lives in React memory; privacy copy appears on gate and intake; no analytics.
+- No PII persistence: workspace state lives in browser `localStorage` only, is never sent to the server as a snapshot, and is cleared by reset/sign-out; privacy copy appears on gate and intake; no analytics.
 - Security headers in `next.config.ts`: `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY`, `Permissions-Policy` minimal.
 - Error responses are sanitized; provider errors are logged server-side without secrets.
 
@@ -541,7 +545,7 @@ Accessibility: semantic headings, labeled inputs, `aria-pressed` chips, `aria-li
 - `login-route.test.ts`: sets cookie on valid credentials; rejects bad email/code; rejects malformed body; 500 on missing secret.
 - `ideas-route.test.ts`: 401 without cookie; 400 invalid payload; 200 with stub provider and requested slots; 413 oversized body; 429 after limit; 503 when provider misconfigured.
 
-**Result:** 8 files / 67 tests passing. **Static gates:** `npm run lint` (ESLint 9 + Next config), `npm run typecheck` (`tsc --noEmit`), `npm run build` (Next 16 production build) all pass. Test/fix loop was run to green within the 5-iteration cap.
+**Result:** 11 files / 78 tests passing. **Static gates:** `npm run lint` (ESLint 9 + Next config), `npm run typecheck` (`tsc --noEmit`), `npm run build` (Next 16 production build) all pass. Test/fix loop was run to green within the 5-iteration cap.
 
 ---
 
@@ -573,12 +577,12 @@ IDEAS_RATE_WINDOW_SECONDS=600
 
 ## 14. Assumptions & Open Questions for Review
 
-1. **No persistence:** refreshing loses the board. Acceptable per PRD's ephemeral requirement. If you want refresh resilience, add `sessionStorage` hydration (small change, still device-local).
+1. **Refresh resilience:** the workspace is saved in `localStorage` under `giftr_workspace_v1:<email>` and restored on refresh. New Person / Reset and sign-out clear it. This supersedes the earlier ephemeral-state assumption.
 1a. **Invite-code list (approved):** `INVITE_CODES` is comma-separated and case-sensitive; each friend can receive a distinct code. Removing a code revokes future logins using that code without affecting other codes. Existing 7-day sessions are unaffected until expiry or `SESSION_SECRET` rotation. `INVITE_CODE` remains as a legacy single-code fallback.
 2. **Accept = lock:** accepting a card is the locking action; max 3 accepted. A separate explicit "Lock" step could be added if desired.
 3. **Rate limit storage:** in-memory is best-effort on serverless. Confirm this is acceptable for the friend-only scale, or budget for Upstash/Vercel KV.
 4. **Custom currency:** supports free-text codes/labels; formatting falls back to `CODE 1,234` when `Intl` does not recognize it.
-5. **Exact links:** model-provided only; no server validation or scraping, per PRD. UI always shows the search fallback and verification warning.
+5. **Exact links:** model-provided only; no server validation or scraping, per PRD. When the model returns no product page, the UI falls back to a currency-aware Amazon search link, plus a Google “Check options” link and a single verification warning.
 6. **Gemini model default:** `gemini-2.5-flash`; confirm your available model/quota, or set `GEMINI_MODEL` to another free-tier model.
 7. **Refill batch size:** one API call fills all rejected slots (up to 5). Confirm this is preferable to per-slot calls (fewer quota units, slightly less variety control).
 

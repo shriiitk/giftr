@@ -3,7 +3,7 @@ import { getProvider } from "@/lib/llm/provider";
 import { LlmConfigError, LlmError } from "@/lib/llm/types";
 import { consumeRateLimit, getRateLimitConfig } from "@/lib/rate-limit";
 import { getSessionFromRequest } from "@/lib/session";
-import { buildSearchUrl } from "@/lib/url";
+import { buildSearchUrl, buildShopSearchUrl } from "@/lib/url";
 import { isBodyWithinLimit, parseIdeasRequest } from "@/lib/validation";
 
 export const runtime = "nodejs";
@@ -84,7 +84,26 @@ export async function POST(request: NextRequest) {
       seed: `${session.email}:${Date.now()}:${payload.slots.join(",")}`,
     });
 
-    const ideas = generated.slice(0, payload.slots.length).map((idea, index) => ({
+    const excluded = new Set(
+      [...payload.acceptedTitles, ...payload.rejectedTitles].map((title) =>
+        title.trim().toLowerCase(),
+      ),
+    );
+    const seen = new Set<string>();
+    const fresh = generated.filter((idea) => {
+      const key = idea.title.trim().toLowerCase();
+      if (excluded.has(key) || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    if (fresh.length < payload.slots.length) {
+      throw new LlmError(
+        "The gift provider suggested an idea you already rejected. Please try again.",
+      );
+    }
+
+    const ideas = fresh.slice(0, payload.slots.length).map((idea, index) => ({
       slot: payload.slots[index],
       title: idea.title,
       description: idea.description,
@@ -93,6 +112,7 @@ export async function POST(request: NextRequest) {
       whyItFits: idea.whyItFits,
       exactUrl: idea.exactUrl,
       searchUrl: buildSearchUrl(idea.title, payload.currency, payload.location),
+      shopUrl: buildShopSearchUrl(idea.title, payload.currency, payload.location),
     }));
 
     return NextResponse.json(

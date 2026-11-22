@@ -71,8 +71,9 @@ export default function ResetDialog({
         </div>
 
         <p id="reset-dialog-description" className="mt-3 text-sm leading-6 text-muted">
-          This clears the recipient brief, all 5 cards, your finalists, and the “Why it
-          fits” note. You will stay signed in on this device.
+          This clears the recipient brief, all 5 cards, your finalists, the “Why it fits”
+          note, and the workspace saved in this browser. You will stay signed in on this
+          device.
         </p>
 
         <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-[#FBF8F3] p-3.5">

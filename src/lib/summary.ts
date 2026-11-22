@@ -29,9 +29,11 @@ export function buildShortlistSummary({ brief, ideas, note }: SummaryInput): str
     ];
 
     if (idea.exactUrl) {
-      lines.push(`   Exact link: ${idea.exactUrl}`);
+      lines.push(`   Product link: ${idea.exactUrl}`);
+    } else if (idea.shopUrl) {
+      lines.push(`   Shop link: ${idea.shopUrl}`);
     }
-    lines.push(`   Search: ${idea.searchUrl}`);
+    lines.push(`   Check options: ${idea.searchUrl}`);
 
     return lines.join("\n");
   });
@@ -42,7 +44,7 @@ export function buildShortlistSummary({ brief, ideas, note }: SummaryInput): str
     parts.push(`Why it fits: ${note.trim()}`);
   }
 
-  parts.push("Verify links & live prices yourself before buying.");
+  parts.push("Prices are estimates. Verify links & live prices yourself before buying.");
 
   return parts.join("\n\n");
 }

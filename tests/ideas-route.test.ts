@@ -89,6 +89,7 @@ describe("POST /api/ideas/round", () => {
         slot: number;
         title: string;
         searchUrl: string;
+        shopUrl: string;
         exactUrl: string | null;
         currency: string;
       }>;
@@ -104,6 +105,7 @@ describe("POST /api/ideas/round", () => {
       expect(idea.title.length).toBeGreaterThan(0);
       expect(idea.currency).toBe("INR");
       expect(idea.searchUrl.startsWith("https://www.google.com/search?q=")).toBe(true);
+      expect(idea.shopUrl.startsWith("https://www.amazon.in/s?k=")).toBe(true);
     }
     expect(response.headers.get("cache-control")).toBe("no-store");
   });

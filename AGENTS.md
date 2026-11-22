@@ -52,18 +52,19 @@ Single source of truth for coding agents. `CLAUDE.md` only imports this file.
 - `src/lib/validation.ts` — brief/slot validation and body-size guard.
 - `src/lib/rate-limit.ts` — in-memory sliding window keyed by session email.
 - `src/lib/llm/` — `provider.ts` selection; `gemini.ts`, `openai-compatible.ts`, `stub.ts`, `parse.ts`, `prompts.ts`, `types.ts`.
+- `src/lib/persistence.ts` — versioned, email-scoped `localStorage` snapshot (`giftr_workspace_v1:<email>`) for refresh resilience.
 - `src/lib/types.ts` — shared types/constants (5 slots, 2–3 finalists, 64 KB, max budget).
 - `src/components/` — `Workspace` owns client state; `AccessGate`, `IntakeForm`, `IdeaGrid`, `IdeaCard`, `Shortlist`, `ResetDialog`, etc.
 - `tests/` — Vitest unit + route tests.
 
 ## Invariants (do not break)
 
-- **Ephemeral only:** brief, cards, finalists, and note live in React state. Refresh clears them. No DB, `localStorage`, `sessionStorage`, or server-side brief storage.
+- **Browser-local persistence:** brief, cards, finalists, note, current view, and rejected-title history are saved to `localStorage` under `giftr_workspace_v1:<email>` so a browser refresh restores the workspace and friends sharing a browser stay isolated. Only an explicit New Person / Reset or sign-out clears it. No DB, no server-side brief storage; never send this snapshot to the server.
 - **Access gate:** allowlisted email (case-insensitive) + any active invite code (case-sensitive). `INVITE_CODES` takes precedence over legacy `INVITE_CODE`. Removing one code blocks future logins with it without affecting other codes; existing 7-day sessions remain until expiry or `SESSION_SECRET` rotation.
 - **Session:** `giftr_session`, `HttpOnly`, `SameSite=Lax`, `Path=/`, 7 days (`604800`s), `Secure` only when `NODE_ENV=production`.
-- **Ideas API:** auth required; rejects bodies >64 KB; rate-limits per session email; slots are unique integers 1–5; server assigns slot numbers; returns exactly the requested count; no automatic retries.
+- **Ideas API:** auth required; rejects bodies >64 KB; rate-limits per session email; slots are unique integers 1–5; server assigns slot numbers; returns exactly the requested count; no automatic retries. Rejected titles are kept for the session and sent back as exclusions, so a replaced card cannot return; the route also rejects provider output that repeats an excluded title.
 - **Shortlist:** accept at most 3; need at least 2 to view; replace only rejected slots; accepted cards stay in place.
-- **Links:** the server never fetches/probes `exactUrl`; it passes model output through. Clickable links are gated by `safeExternalUrl` (http/https only); every idea gets a Google search fallback via `buildSearchUrl`; always show the “verify link & live price” notice.
+- **Links:** the server never fetches/probes `exactUrl`; it passes model output through. Clickable links are gated by `safeExternalUrl` (http/https only). Every idea gets two links: a product page when `exactUrl` exists, otherwise an Amazon search fallback from `buildShopSearchUrl` (currency-aware), plus a Google “Check options” link from `buildSearchUrl`. Show the “prices are estimates / verify live price” notice once per page, not per card.
 - **Privacy:** nickname/persona only; no full names, addresses, phone numbers, or other PII; no checkout/purchasing; no analytics.
 - **Provider contract:** `LlmProvider.generateIdeas(input)` returns `GeneratedIdea[]`. Missing key/unknown provider → `503`; provider failure → `502`; 25s timeout. No silent fallback in production; `stub` is explicit for local/CI.
 - **No server URL scraping/validation:** don't add backend fetch/probing of model URLs.
@@ -79,9 +80,9 @@ Single source of truth for coding agents. `CLAUDE.md` only imports this file.
 
 ## Current status vs design docs
 
-- Implemented: access gate, presets, 5-slot board, accept/reject/replace, 2–3 shortlist, note, copy/share, provider adapter, rate limiting, 67 tests.
-- Not implemented (some are explicit non-goals): external Python API hook (HLD future), image/media cards, confidence scores, heart/bookmark icons, filter drawer (DESIGN.md concepts), refresh persistence, shared/global rate limit.
-- Known doc drift: LLD says `validateCredentials` returns `reason`; code returns `{ status, error }`. LLD says body size is checked via `Content-Length`; code reads the body bytes. LLD says the search URL uses title + currency; code also includes location and “buy”. LLD calls the stub deterministic; it is deterministic only for the same seed, while the route seed includes a timestamp.
+- Implemented: access gate, presets, 5-slot board, accept/reject/replace, 2–3 shortlist, note, copy/share, provider adapter, rate limiting, browser-local refresh persistence, rejected-title history, 78 tests.
+- Not implemented (some are explicit non-goals): external Python API hook (HLD future), image/media cards, confidence scores, heart/bookmark icons, filter drawer (DESIGN.md concepts), shared/global rate limit.
+- Known doc drift: LLD says `validateCredentials` returns `reason`; code returns `{ status, error }`. LLD says body size is checked via `Content-Length`; code reads the body bytes. LLD says the search URL uses title + currency; code also includes location and “buy”. LLD calls the stub deterministic; it is deterministic only for the same seed, while the route seed includes a timestamp. Older LLD/DEPLOYMENT text says refresh loses the board; the code now restores it from `localStorage`.
 - Treat the code as the source of truth; update docs when behavior changes.
 
 ## Maintenance rule

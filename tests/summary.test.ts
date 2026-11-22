@@ -25,6 +25,7 @@ function idea(overrides: Partial<GiftIdea> = {}): GiftIdea {
     whyItFits: "Matches the pour-over ritual.",
     exactUrl: "https://example.com/pour-over",
     searchUrl: "https://www.google.com/search?q=Stoneware+Pour-Over+Set+INR",
+    shopUrl: "https://www.amazon.in/s?k=Stoneware+Pour-Over+Set",
     status: "accepted",
     rejectionReason: null,
     ...overrides,
@@ -55,11 +56,14 @@ describe("shortlist summary", () => {
     expect(summary).toContain("3,200");
     expect(summary).toContain("1,800");
     expect(summary).toContain("Estimated total");
-    expect(summary).toContain("https://example.com/pour-over");
-    expect(summary).toContain("https://www.google.com/search?q=Stoneware+Pour-Over+Set+INR");
+    expect(summary).toContain("Product link: https://example.com/pour-over");
+    expect(summary).toContain("Shop link: https://www.amazon.in/s?k=Stoneware+Pour-Over+Set");
+    expect(summary).toContain(
+      "Check options: https://www.google.com/search?q=Stoneware+Pour-Over+Set+INR",
+    );
     expect(summary).toContain("Why it fits: Thoughtful picks for slow mornings.");
     expect(summary).toContain("Verify links & live prices yourself before buying.");
-    expect(summary).not.toContain("Exact link: null");
+    expect(summary).not.toContain("Product link: null");
   });
 
   it("omits the note block when the note is empty", () => {

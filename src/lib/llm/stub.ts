@@ -1,3 +1,4 @@
+import { LlmError } from "./types";
 import type { GeneratedIdea, IdeaGenerationInput, LlmProvider } from "./types";
 
 interface StubSeed {
@@ -92,6 +93,90 @@ const POOL: StubSeed[] = [
     why: "Hosting-friendly and easy to use without demanding special care.",
     fraction: 0.58,
   },
+  {
+    title: "Pre-Seasoned Cast Iron Mini Skillet",
+    description:
+      "A compact cast-iron skillet for single servings, breakfast eggs, or a small stovetop-to-table bake.",
+    why: "A durable, practical upgrade for someone who enjoys simple home cooking.",
+    fraction: 0.44,
+  },
+  {
+    title: "Hand-Felted Wool Coaster Set",
+    description:
+      "Six thick merino-wool coasters in muted, earthy tones with a small cotton storage pouch.",
+    why: "Quietly useful, warm, and easy to keep on a coffee table without adding clutter.",
+    fraction: 0.18,
+  },
+  {
+    title: "Portable Hand-Pump Espresso Maker",
+    description:
+      "A compact manual espresso press that works without electricity and packs into a small travel case.",
+    why: "A thoughtful pick for coffee lovers who travel or camp.",
+    fraction: 0.76,
+  },
+  {
+    title: "Hardcover Recipe & Kitchen Journal",
+    description:
+      "A lay-flat recipe journal with tabbed sections for favourites, shopping lists, and dinner notes.",
+    why: "Encourages a hobby to grow and keeps handwritten recipes in one place.",
+    fraction: 0.26,
+  },
+  {
+    title: "Cedar Drawer & Closet Liners",
+    description:
+      "A set of thin cedar panels that freshen drawers and closets with a clean, natural scent.",
+    why: "An easy home upgrade that feels considered without requiring any maintenance.",
+    fraction: 0.14,
+  },
+  {
+    title: "Reusable Produce & Market Bags",
+    description:
+      "A lightweight set of washable mesh bags with drawstrings for groceries and farmers-market runs.",
+    why: "Practical for everyday errands and a gentle nudge toward less waste.",
+    fraction: 0.12,
+  },
+  {
+    title: "Ceramic Propagation Station",
+    description:
+      "A three-stem ceramic vase for rooting cuttings on a windowsill or desk.",
+    why: "Brings a little greenery indoors and suits plant-curious homes.",
+    fraction: 0.32,
+  },
+  {
+    title: "Washed Linen Apron",
+    description:
+      "A cross-back linen apron with deep pockets for cooking, gardening, or studio work.",
+    why: "Useful across hobbies and softens with every wash.",
+    fraction: 0.5,
+  },
+  {
+    title: "Travel Jewelry Organizer",
+    description:
+      "A compact zip case with ring rolls, necklace hooks, and small pouches for trips.",
+    why: "Keeps small valuables tidy and is easy to slip into a carry-on.",
+    fraction: 0.38,
+  },
+  {
+    title: "Solar-Powered Camp Lantern",
+    description:
+      "A collapsible, rechargeable lantern with a warm low setting and a hanging loop.",
+    why: "Handy for balconies, power cuts, camping, or evening dinners outside.",
+    fraction: 0.64,
+  },
+  {
+    title: "Wooden Logic Puzzle Box",
+    description:
+      "A hand-finished wooden brain-teaser with a hidden compartment for a small note or treat.",
+    why: "A playful, screen-free gift for someone who enjoys a satisfying challenge.",
+    fraction: 0.42,
+  },
+  {
+    title: "Single-Origin Tea Sampler",
+    description:
+      "A small assortment of loose-leaf black, green, and herbal teas with reusable cotton filters.",
+    why: "A low-commitment way to explore a new ritual and easy to share.",
+    fraction: 0.28,
+  },
 ];
 
 function hashSeed(value: string): number {
@@ -132,15 +217,20 @@ export class StubProvider implements LlmProvider {
       input.excludeTitles.map((title) => title.trim().toLowerCase()),
     );
     const available = POOL.filter((seed) => !excluded.has(seed.title.toLowerCase()));
-    const source = available.length >= input.count ? available : POOL;
+
+    if (available.length < input.count) {
+      throw new LlmError(
+        "No more fresh gift ideas are available in the local stub pool. Reset the workspace to start over.",
+      );
+    }
 
     const offset =
       hashSeed(
         `${input.seed ?? ""}|${input.brief.nickname}|${input.slots.join(",")}`,
-      ) % source.length;
+      ) % available.length;
 
     return Array.from({ length: input.count }, (_, index) => {
-      const seed = source[(offset + index) % source.length];
+      const seed = available[(offset + index) % available.length];
       const price = priceFor(input, seed.fraction);
       return {
         title: seed.title,
